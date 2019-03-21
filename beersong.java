@@ -18,6 +18,6 @@ public class BeerSong {
       } else {
         System.out.println("Нет бутылок пива на стене");
       } // Конец else
-    } // Конец цикла wfci:
+    } // Конец цикла while
   } // Конец метода main
 } // Коней класса
