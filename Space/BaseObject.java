@@ -1,36 +1,15 @@
 package com.javarush.task.task25.task2515;
-/*
-Space (6)
-Но и это еще не все.
-Классу BaseObject нужны еще методы.
-Пока это будут пустые методы draw() и move().
-Классы-наследники должны будут переопределить их у себя и реализовать необходимую функциональность.
 
-Еще добавь метод die() - объект умирает (isAlive=false)
-
-А еще нам нужно будет определять попала бомба в корабль или ракета в НЛО.
-Это будем делать так:
-Создадим специальный метод: public boolean isIntersect(BaseObject o)
-Он будет определять - "пересеклись" объекты или нет. Если пересеклись - возвращать true, если нет - false.
-
-Т.к. объекты мы условно считаем кругами, то предлагаю такую формулу взаимодействия:
-eсли центр круга одного объекта попал в круг другого, то будем считать, что они столкнулись.
-Или еще проще:
-дистанция_между_объектами < max (радиус_первого_объекта, радиус_второго_объекта).
-
-
-Требования:
-1. В классе BaseObject создай пустой метод draw().
-2. В классе BaseObject создай пустой метод move().
-3. В классе BaseObject создай метод die(), который присваивает полю isAlive значение false.
-4. В классе BaseObject создай метод isIntersect(BaseObject o), который возвращает boolean.
-5. Реализуй метод isIntersect(BaseObject o). В случае если объекты столкнулись, нужно вернуть true, иначе - false
+/**
+ * Базовый класс для всех объектов игры.
  */
-abstract class BaseObject {
-    private double x;
-    private double y;
-    private double radius;
-
+public abstract class BaseObject {
+    //координаты
+    protected double x;
+    protected double y;
+    //радиус объекта
+    protected double radius;
+    //состояние объект - жив ли объект
     private boolean isAlive;
 
     public BaseObject(double x, double y, double radius) {
@@ -38,20 +17,6 @@ abstract class BaseObject {
         this.y = y;
         this.radius = radius;
         this.isAlive = true;
-    }
-    public void draw(){}
-    public void move(){}
-    public void die(){
-        this.isAlive = false;
-    }
-    public boolean isIntersect(BaseObject o){
-//        дистанция_между_объектами < max (радиус_первого_объекта, радиус_второго_объекта)
-        double distance = Math.sqrt(Math.pow((this.getX() - o.getX()), 2) + Math.pow((this.getY() - o.getY()), 2));
-        return (distance <= (this.getRadius() + o.getRadius()));
-    }
-
-    public boolean isAlive() {
-        return isAlive;
     }
 
     public double getX() {
@@ -78,5 +43,50 @@ abstract class BaseObject {
         this.radius = radius;
     }
 
+    /**
+     * Метод рисует свой объект на "канвасе".
+     */
+    public void draw(Canvas canvas) {
+        //do nothing
+    }
 
+    /**
+     * Двигаем себя на один ход.
+     */
+    public void move() {
+        //do nothing
+    }
+
+    /**
+     * Проверяем - не выходит ли (x,y) за границы.
+     */
+    public void checkBorders(double minx, double maxx, double miny, double maxy) {
+        if (x < minx) x = minx;
+        if (x > maxx) x = maxx;
+        if (y < miny) y = miny;
+        if (y > maxy) y = maxy;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void die() {
+        isAlive = false;
+    }
+
+    /**
+     * Проверяем - пересекаются ли переданный(o) и наш(this) объекты.
+     */
+    public boolean isIntersect(BaseObject o) {
+        double dx = x - o.x;
+        double dy = y - o.y;
+        double destination = Math.sqrt(dx * dx + dy * dy);
+        double destination2 = Math.max(radius, o.radius);
+        return destination <= destination2;
+    }
 }
