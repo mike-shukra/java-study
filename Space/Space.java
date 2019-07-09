@@ -30,6 +30,7 @@ public class Space {
     private List<Ufo> ufos = new ArrayList<>();
     private List<Rocket> rockets = new ArrayList<>();
     private List<Bomb> bombs = new ArrayList<>();
+    public static Space game;
 
     public Space(int width, int height) {
         this.width = width;
@@ -65,9 +66,9 @@ public class Space {
     }
 
     public static void main(String[] args) {
-        Canvas canvas = new Canvas(5, 5);
-        canvas.clear();
-        canvas.print();
+//        Canvas canvas = new Canvas(5, 5);
+//        canvas.clear();
+//        canvas.print();
 
 
     }
@@ -75,4 +76,6 @@ public class Space {
     public void run(){}
     public void draw(){}
     public void sleep(int ms){}
+
+
 }
