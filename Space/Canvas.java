@@ -1,26 +1,51 @@
 package com.javarush.task.task25.task2515;
 /*
-Space (7)
-Теперь займемся классом Canvas.
-Он у нас будет содержать матрицу, куда мы будем рисовать.
-У матрицы есть ширина и высота.
-А еще будем в ней хранить не числа (int), а символы (char).
+Space (8)
+Что мы будем делать с Canvas?
+Мы будем рисовать на нем (в его матрице).
 
-Надо:
-а) Добавить в класс две переменные width и height;
-б) Добавить в класс переменную matrix (char[][]);
-в) Добавь геттеры для них;
-г) В конструкторе проинициализируй матрицу.
+Поэтому нам понадобятся два метода:
+public void setPoint(double x, double y, char c),
+public void drawMatrix(double x, double y, int[][] matrix, char c).
+
+Первый метод - setPoint будет "ставить точку в координатах x,y цветом c".
+В методе надо:
+а) округлить x и y до целых чисел,
+б) занести в matrix[y][x] значение с,
+в) ничего не делать, если x<0 или y<0 или y>=matrix.length или x>=matrix[0].length.
+
+Второй метод - drawMatrix копирует переданную ему картинку (матрицу) в матрицу Canvas.
+И не просто копирует, а начиная с координат x, y.
+
+В методе надо:
+а) с помощью двух вложенных циклов пройтись по всем ячейкам переданной картинки,
+б) если значение ячейки matrix[i][j] не равно 0, то покрасить в матрице объекта Canvas точку (x+j, y+i) в цвет c:
+setPoint(x+j, y+i, c)
 
 
 Требования:
-1. В классе Canvas создай поле width. Добавь для него getter.
-2. В классе Canvas создай поле height. Добавь для него getter.
-3. В классе Canvas создай поле matrix (char[][]). Добавь для него getter.
-4. В классе Canvas создай конструктор Canvas(int width, int height). Инициализируй поля width и height.
-5. Инициализируй в конструкторе поле matrix (char[height][width]).
+1. В классе Canvas создай метод public void setPoint(double x, double y, char c).
+2. Метод setPoint должен заносить в матрицу по координатам x, y символ с.
+3. В классе Canvas создай метод public void drawMatrix(double x, double y, int[][] matrix, char c).
+4. Метод drawMatrix, начиная с координат x, y, должен заполнять полотно символами с, согласно переданной в метод матрицей matrix.
  */
 public class Canvas {
+
+    public void setPoint(double x, double y, char c){
+        if (x < 0 || y < 0 || y >= matrix.length || x >= matrix[0].length) return;
+        int xxx = (int) Math.round(x);
+        int yyy = (int) Math.round(y);
+        this.matrix[yyy][xxx] = c;
+
+    }
+    public void drawMatrix(double x, double y, int[][] matrix, char c){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] != 0) setPoint(x+j, y+i, c);
+            }
+        }
+    }
+
     public int getWidth() {
         return width;
     }
