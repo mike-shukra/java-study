@@ -25,6 +25,33 @@ Space (15)
 Требования:
 1. В классе Space реализуй метод getAllItems(). Он должен возвращать список всех объектов типа BaseObject, которые сохранены в полях Space.
 2. В классе Space реализуй метод moveAllItems(). Он должен вызывать move() у всех объектов типа BaseObject, которые сохранены в полях Space.
+
+Space (16)
+И еще немного:
+
+Напиши метод createUfo():
+Если список НЛО пуст - создай один корабль в центре сверху.
+
+Напиши метод checkBombs():
+Надо проверить - не пересеклись между собой какая-нибудь бомба и корабль.
+Если пересеклись - корабль и бомба умирают - die().
+Если бомба упала за границу экрана y > height бомба тоже умирает.
+
+Напиши метод checkRockets():
+Надо проверить - не пересеклись между собой какая-нибудь ракета и НЛО.
+Если пересеклись - ракета и нло умирают - die().
+Если ракета улетела за границу экрана y < 0, ракета тоже умирает.
+
+Напиши метод removeDead():
+В этом методе удали из списков ufos, rockets, bombs все мертвые объекты (isAlive() == false).
+
+
+Требования:
+1. В классе Space реализуй метод createUfo() согласно описанию в задании.
+2. В классе Space реализуй метод checkBombs() согласно описанию в задании.
+3. В классе Space реализуй метод checkRockets() согласно описанию в задании.
+4. В классе Space реализуй метод removeDead() согласно описанию в задании.
+
  */
 public class Space {
     //Ширина и высота игрового поля
@@ -132,6 +159,9 @@ public class Space {
     public void createUfo() {
         //тут нужно создать новый НЛО.
         //1 раз за 10 вызовов метода.
+        double x = Math.random() * width;
+        double y = Math.random() * height / 2;
+        if (ufos.size() == 0) ufos.add(new Ufo(x, y));
     }
 
     /**
@@ -141,6 +171,17 @@ public class Space {
      */
     public void checkBombs() {
         //тут нужно проверить все возможные столкновения для каждой бомбы.
+//        Надо проверить - не пересеклись между собой какая-нибудь бомба и корабль.
+//        Если пересеклись - корабль и бомба умирают - die().
+//        Если бомба упала за границу экрана y > height бомба тоже умирает.
+        for (Bomb bomb : bombs) {
+            if (bomb.isIntersect(ship)) {
+                bomb.die();
+                ship.die();
+            }
+
+            if (bomb.getY() > height) bomb.die();
+        }
     }
 
     /**
@@ -150,6 +191,16 @@ public class Space {
      */
     public void checkRockets() {
         //тут нужно проверить все возможные столкновения для каждой ракеты.
+        for (Rocket rocket : rockets) {
+            for (Ufo ufo : ufos) {
+                if (ufo.isIntersect(rocket)) {
+                    ufo.die();
+                    rocket.die();
+                }
+            }
+
+            if (rocket.getY() < 0) rocket.die();
+        }
     }
 
     /**
@@ -158,6 +209,11 @@ public class Space {
     public void removeDead() {
         //тут нужно удалить все умершие объекты из списков.
         //Кроме космического корабля - по нему определяем идет еще игра или нет.
+        bombs.removeIf(x -> !x.isAlive());
+        ufos.removeIf(x -> !x.isAlive());
+        rockets.removeIf(x -> !x.isAlive());
+
+        baseObjects.removeIf(x -> !x.isAlive());
     }
 
     /**
