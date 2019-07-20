@@ -3,20 +3,23 @@ package com.javarush.task.task21.task2113;
 import java.util.ArrayList;
 import java.util.List;
 /*
-Ипподром(13)
-Теперь вернемся к методу print класса Horse.
+Ипподром(15)
+Добавим определение победителя.
+В классе Hippodrome сделаем два метода:
+public Horse getWinner() и public void printWinner()
 
-Т.к. мы работаем с консолью, то все лошади на бегах будут выглядеть примерно так:
-........Slevin
-....Lucky
-..........Homer
+Метод getWinner должен возвращать лошадь пробежавшую самую большую дистанцию.
+Метод printWinner выводит на экран имя победителя в виде: Winner is <name>!
 
-Другими словами, в методе print надо вывести на экран строку состоящую из точек и имени лошади.
-Количество точек равно distance, округленному (в меньшую сторону) до целого числа.
+Пример:
+Winner is Lucky!
 
 
 Требования:
-1. Метод print должен выводить на экран строку состоящую из точек и имени лошади. Количество точек равно целой части distance.
+1. В классе Hippodrome должен быть создан метод getWinner без параметров.
+2. В классе Hippodrome должен быть создан метод printWinner без параметров.
+3. Метод getWinner должен возвращать лошадь пробежавшую наибольшую дистанцию.
+4. Метод printWinner должен выводить на экран имя победителя на экран в формате заданном в условии задачи.
  */
 public class Hippodrome {
     public static Hippodrome game;
@@ -28,6 +31,17 @@ public class Hippodrome {
 
     public Hippodrome(List<Horse> horses) {
         this.horses = horses;
+    }
+    public Horse getWinner(){
+        Horse vinner = null;
+        int maxDistanse = 0;
+        for (Horse horse: horses) {
+            if (horse.getDistance() > maxDistanse) vinner = horse;
+        }
+        return vinner;
+    }
+    public void printWinner(){
+        System.out.println("Winner is " + getWinner().getName() + "!");
     }
 
     public void run() throws InterruptedException {
