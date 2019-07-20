@@ -3,23 +3,16 @@ package com.javarush.task.task21.task2113;
 import java.util.ArrayList;
 import java.util.List;
 /*
-Ипподром(15)
-Добавим определение победителя.
-В классе Hippodrome сделаем два метода:
-public Horse getWinner() и public void printWinner()
+Ипподром(16)
+Теперь уже точно все.
 
-Метод getWinner должен возвращать лошадь пробежавшую самую большую дистанцию.
-Метод printWinner выводит на экран имя победителя в виде: Winner is <name>!
+Добавь вызов метода printWinner в конец метода main.
 
-Пример:
-Winner is Lucky!
+Запускай и любуйся своей первой компьютерной игрой :)
 
 
 Требования:
-1. В классе Hippodrome должен быть создан метод getWinner без параметров.
-2. В классе Hippodrome должен быть создан метод printWinner без параметров.
-3. Метод getWinner должен возвращать лошадь пробежавшую наибольшую дистанцию.
-4. Метод printWinner должен выводить на экран имя победителя на экран в формате заданном в условии задачи.
+1. Метод printWinner должен быть вызван в методе main после метода run.
  */
 public class Hippodrome {
     public static Hippodrome game;
@@ -71,5 +64,6 @@ public class Hippodrome {
         game.horses.add(new Horse("horseTwo", (double)3, (double)0));
         game.horses.add(new Horse("horseThree", (double)3, (double)0));
         game.run();
+        game.printWinner();
     }
 }
