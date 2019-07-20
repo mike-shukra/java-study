@@ -3,19 +3,15 @@ package com.javarush.task.task21.task2113;
 import java.util.ArrayList;
 import java.util.List;
 /*
-Ипподром(9)
-Теперь вернемся к методам move и print. Начнем с move.
-В методе move класса Hippodrome в цикле у каждой лошади мы вызываем метод move.
-Да ты прав, его еще нет у класса Horse.
-Поэтому в класс Horse надо добавить свой метод move :)
-И метод print, кстати тоже.
-Если я не говорю ничего насчет параметров метода, значит метод без параметров.
-Делай все методы public, если явно не указано обратное.
+Ипподром(10)
+Еще нужно написать метод print класса Hippodrome.
+В нем тоже все просто: в цикле для каждой лошади вызываем ее метод print.
+Ну, и еще выведи после цикла 10 пустых строк: System.out.println() - чтобы было красивее.
+
 
 Требования:
-1. В классе Horse должен быть создан метод move.
-2. В классе Horse должен быть создан метод print.
-3. В методе move класса Hippodrome должен быть вызван метод move по одному разу для каждой лошади(каждого элемента списка horses).
+1. В методе print класса Hippodrome должен быть вызван метод print по одному разу для каждой лошади(каждого элемента списка horses).
+2. В методе print должны быть выведены на экран 10 пустых строк.
  */
 public class Hippodrome {
     public static Hippodrome game;
@@ -41,7 +37,14 @@ public class Hippodrome {
             horse.move();
         }
     }
-    public void print(){}
+    public void print(){
+        for (Horse horse: horses) {
+            horse.print();
+        }
+        for (int i = 0; i < 10; i++) {
+            System.out.println();
+        }
+    }
     
     public static void main(String[] args) {
         game = new Hippodrome(new ArrayList<>());
