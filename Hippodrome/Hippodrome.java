@@ -3,15 +3,20 @@ package com.javarush.task.task21.task2113;
 import java.util.ArrayList;
 import java.util.List;
 /*
-Ипподром(10)
-Еще нужно написать метод print класса Hippodrome.
-В нем тоже все просто: в цикле для каждой лошади вызываем ее метод print.
-Ну, и еще выведи после цикла 10 пустых строк: System.out.println() - чтобы было красивее.
+Ипподром(11)
+С классом Hippodrome почти закончили.
+Добавь в конец метода main вызов run().
+
+Подсказка:
+run() - это нестатический метод, поэтому вызвать его можно только у объекта.
+А где взять объект?
+
+Подсказка 2:
+game.run();
 
 
 Требования:
-1. В методе print класса Hippodrome должен быть вызван метод print по одному разу для каждой лошади(каждого элемента списка horses).
-2. В методе print должны быть выведены на экран 10 пустых строк.
+1. В методе main должен быть вызван метод run у объекта типа Hippodrome.
  */
 public class Hippodrome {
     public static Hippodrome game;
@@ -46,10 +51,11 @@ public class Hippodrome {
         }
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         game = new Hippodrome(new ArrayList<>());
         game.horses.add(new Horse("horseOne", (double)3, (double)0));
         game.horses.add(new Horse("horseTwo", (double)3, (double)0));
         game.horses.add(new Horse("horseThree", (double)3, (double)0));
+        game.run();
     }
 }
