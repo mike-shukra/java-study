@@ -3,18 +3,17 @@ package com.javarush.task.task21.task2113;
 import java.util.ArrayList;
 import java.util.List;
 /*
-Ипподром(7)
-Но и это еще не все - надо чтобы лошади бежали.
-Добавь в класс Hippodrome методы run, move и print. Без параметров.
-Метод move будет управлять движением всех лошадей.
-Метод print отрисовывать их на экран.
-А метод run - управлять всем этим.
+Ипподром(8)
+В методе run сделай цикл от 1 до 100. Это и будет наш забег.
+В теле цикла вызываем сначала move, затем print.
+Чтобы весь цикл не отработал за долю секунды - добавь в него еще Thread.sleep(200);
 
 
 Требования:
-1. В классе Hippodrome должен быть создан метод run без параметров.
-2. В классе Hippodrome должен быть создан метод move без параметров.
-3. В классе Hippodrome должен быть создан метод print без параметров.
+1. В методе run класса Hippodrome должен быть 100 раз вызван метод move.
+2. В методе run класса Hippodrome должен быть 100 раз вызван метод print.
+3. В методе run класса Hippodrome должен быть 100 раз вызван метод Thread.sleep(200).
+4. Метод print должен быть вызван после метода move.
  */
 public class Hippodrome {
     public static Hippodrome game;
@@ -28,10 +27,16 @@ public class Hippodrome {
         this.horses = horses;
     }
 
-    public void run(){}
+    public void run() throws InterruptedException {
+        for (int i = 0; i < 100; i++) {
+            move();
+            print();
+            Thread.sleep(200);
+        }
+    }
     public void move(){}
     public void print(){}
-
+    
     public static void main(String[] args) {
         game = new Hippodrome(new ArrayList<>());
         game.horses.add(new Horse("horseOne", (double)3, (double)0));
