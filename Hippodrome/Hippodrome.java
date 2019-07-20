@@ -9,6 +9,10 @@ public class Hippodrome {
         return horses;
     }
 
+    public Hippodrome(List<Horse> horses) {
+        this.horses = horses;
+    }
+
     public static void main(String[] args) {
         
     }
