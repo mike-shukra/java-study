@@ -40,6 +40,8 @@ import java.util.List;
 public class ModelData {
     private List<User> users;
     private User activeUser;
+    private boolean displayDeletedUserList;
+
 
     public boolean isDisplayDeletedUserList() {
         return displayDeletedUserList;
@@ -48,10 +50,6 @@ public class ModelData {
     public void setDisplayDeletedUserList(boolean displayDeletedUserList) {
         this.displayDeletedUserList = displayDeletedUserList;
     }
-
-    private boolean displayDeletedUserList;
-
-    void loadUsers(){}
 
     public List<User> getUsers() {
         return users;

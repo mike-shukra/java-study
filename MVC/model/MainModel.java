@@ -24,7 +24,6 @@ public class MainModel implements Model {
         modelData.setDisplayDeletedUserList(false);
         List<User> users = getAllUsers();
         modelData.setUsers(users);
-
     }
 
     @Override
@@ -42,8 +41,13 @@ public class MainModel implements Model {
     @Override
     public void deleteUserById(long id){
         userService.deleteUser(id);
-        modelData.setDisplayDeletedUserList(false);
-        modelData.setUsers(getAllUsers());
+        loadUsers();
+    }
+
+    @Override
+    public void changeUserData(String name, long id, int level) {
+        userService.createOrUpdateUser(name, id, level);
+        loadUsers();
     }
 
 }
