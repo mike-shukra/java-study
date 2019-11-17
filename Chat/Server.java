@@ -7,22 +7,28 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
-Чат (7)
-Т.к. сервер может одновременно работать с несколькими клиентами, нам понадобится метод для отправки сообщения сразу всем.
+Чат (10)
+Этап третий - главный цикл обработки сообщений сервером.
 
-Добавь в класс Server:
+Добавь приватный метод void serverMainLoop(Connection connection, String userName) throws IOException, ClassNotFoundException, где значение параметров такое же,
+как и у метода notifyUsers().
 
-1. Статическое поле Map<String, Connection> connectionMap, где ключом будет имя клиента, а значением - соединение с ним.
-2. Инициализацию поля из п.7.1 с помощью подходящего Map из библиотеки java.util.concurrent, т.к. работа с этим полем будет происходить из разных потоков
-и нужно обеспечить потокобезопасность.
-3. Статический метод void sendBroadcastMessage(Message message), который должен отправлять сообщение message всем соединениям из connectionMap.
-Если при отправке сообщение произойдет исключение IOException, нужно отловить его и сообщить пользователю, что не смогли отправить сообщение.
+Он должен:
+1. Принимать сообщение клиента
+2. Если принятое сообщение - это текст (тип TEXT), то формировать новое текстовое сообщение путем конкатенации: имени клиента, двоеточия, пробела и текста сообщения.
+Например, если мы получили сообщение с текстом "привет чат" от пользователя "Боб", то нужно сформировать сообщение "Боб: привет чат".
+3. Отправлять сформированное сообщение всем клиентам с помощью метода sendBroadcastMessage().
+4. Если принятое сообщение не является текстом, вывести сообщение об ошибке
+5. Организовать бесконечный цикл, внутрь которого перенести функционал пунктов 10.1-10.4.
 
 
 Требования:
-1. В классе Server должно существовать статическое приватное поле connectionMap типа Map.
-2. Поле connectionMap должно быть инициализировано потокобезопасной реализаций интерфейса Map из пакета java.util.concurrent.
-3. В классе Server должен быть корректно реализован статический метод sendBroadcastMessage(Message message), отправляющий сообщение всем соединениям из connectionMap.
+1. В классе Handler должен быть создан метод private void serverMainLoop(Connection connection, String userName).
+2. Метод serverMainLoop() должен в бесконечном цикле получать сообщения от клиента (используя метод receive() класса Connection).
+3. Если сообщение, полученное методом serverMainLoop(), имеет тип MessageType.TEXT, то должно быть отправлено новое сообщение всем участникам чата
+используя метод sendBroadcastMessage() (форматирование сообщения описано в условии).
+4. Если сообщение, полученное методом serverMainLoop(), имеет тип отличный от MessageType.TEXT, метод sendBroadcastMessage() не должен быть вызван,
+и должно быть выведено сообщение об ошибке.
  */
 public class Server {
     private static Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
@@ -55,6 +61,72 @@ public class Server {
 
     private static class Handler extends Thread{
         private Socket socket;
+
+        private void serverMainLoop(Connection connection, String userName) throws IOException, ClassNotFoundException{
+            /*
+            Он должен:
+            1. Принимать сообщение клиента
+            2. Если принятое сообщение - это текст (тип TEXT), то формировать новое текстовое сообщение путем конкатенации: имени клиента, двоеточия, пробела и текста сообщения.
+            Например, если мы получили сообщение с текстом "привет чат" от пользователя "Боб", то нужно сформировать сообщение "Боб: привет чат".
+            3. Отправлять сформированное сообщение всем клиентам с помощью метода sendBroadcastMessage().
+            4. Если принятое сообщение не является текстом, вывести сообщение об ошибке
+            5. Организовать бесконечный цикл, внутрь которого перенести функционал пунктов 10.1-10.4.
+
+
+            Требования:
+            1. В классе Handler должен быть создан метод private void serverMainLoop(Connection connection, String userName).
+            2. Метод serverMainLoop() должен в бесконечном цикле получать сообщения от клиента (используя метод receive() класса Connection).
+            3. Если сообщение, полученное методом serverMainLoop(), имеет тип MessageType.TEXT, то должно быть отправлено новое сообщение всем участникам чата
+            используя метод sendBroadcastMessage() (форматирование сообщения описано в условии).
+            4. Если сообщение, полученное методом serverMainLoop(), имеет тип отличный от MessageType.TEXT, метод sendBroadcastMessage() не должен быть вызван,
+            и должно быть выведено сообщение об ошибке.
+             */
+
+            while (true) {
+                Message message = connection.receive();
+                if (message != null && message.getType() == MessageType.TEXT) {
+                    sendBroadcastMessage(new Message(MessageType.TEXT, userName + ": " + message.getData()));
+                } else {
+                    ConsoleHelper.writeMessage("Error!");
+                }
+            }
+
+        }
+
+        private void notifyUsers(Connection connection, String userName) throws IOException{
+            /*
+            Метод должен:
+            1) Пройтись по connectionMap.
+            2) У каждого элемента из п.1 получить имя клиента, сформировать команду с типом USER_ADDED и полученным именем.
+            3) Отправить сформированную команду через connection.
+            4) Команду с типом USER_ADDED и именем равным userName отправлять не нужно, пользователь и так имеет информацию о себе.
+
+
+            Требования:
+            1. В классе Handler должен быть создан метод private void notifyUsers(Connection connection, String userName).
+            2. Метод notifyUsers() должен отправлять через connection сообщение о том, что был добавлен пользователь с именем name для каждого имени из connectionMap.
+            3. Метод notifyUsers() НЕ должен отправлять сообщение о добавлении пользователя, если имя пользователя совпадает со вторым параметром метода (userName).
+             */
+            for (String clientName : connectionMap.keySet()) {
+
+                if (!userName.equals(clientName))
+                    connection.send(new Message(MessageType.USER_ADDED, clientName));
+            }
+        }
+        private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException{
+            connection.send(new Message(MessageType.NAME_REQUEST));
+            Message reply = connection.receive();
+            String name = reply.getData();
+            if (reply.getType() == MessageType.USER_NAME) {
+                if (connectionMap.get(name) == null && !name.equals("")) {
+                    connectionMap.put(name, connection);
+                    connection.send(new Message(MessageType.NAME_ACCEPTED));
+                    return name;
+                }
+                else return serverHandshake(connection);
+            }
+            else return serverHandshake(connection);
+        }
 
         public Handler (Socket socket){
             this.socket = socket;
