@@ -41,7 +41,7 @@ public class ConsoleHelper {
         System.out.println(message);
     }
     public static String readString(){
-        String s = "";
+        String s;
         try {
             s = reader.readLine();
         } catch (IOException e) {
@@ -51,7 +51,7 @@ public class ConsoleHelper {
         return s;
     }
     public static int readInt(){
-        int i = 0;
+        int i;
         try {
             String s = readString();
             i = Integer.parseInt(s);
